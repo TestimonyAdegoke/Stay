@@ -1,0 +1,18 @@
+create extension if not exists "pgcrypto";
+create type commitment_kind as enum ('practice','limit','block');
+create type enforcement_level as enum ('gentle','firm','locked');
+create type link_status as enum ('pending','active','revoked');
+create table profiles(id uuid primary key references auth.users(id) on delete cascade,display_name text not null,created_at timestamptz not null default now());
+create table commitments(id uuid primary key default gen_random_uuid(),owner_id uuid not null references profiles(id) on delete cascade,title text not null,description text,kind commitment_kind not null,enforcement enforcement_level not null default 'gentle',target_value numeric,target_unit text,schedule jsonb not null default '{}'::jsonb,is_active boolean not null default true,created_at timestamptz not null default now());
+create table accountability_links(id uuid primary key default gen_random_uuid(),owner_id uuid not null references profiles(id) on delete cascade,partner_id uuid not null references profiles(id) on delete cascade,status link_status not null default 'pending',created_at timestamptz not null default now(),unique(owner_id,partner_id));
+create table commitment_shares(commitment_id uuid references commitments(id) on delete cascade,link_id uuid references accountability_links(id) on delete cascade,share_progress boolean not null default true,share_missed boolean not null default true,share_enforcement_events boolean not null default false,primary key(commitment_id,link_id));
+create table checkins(id uuid primary key default gen_random_uuid(),commitment_id uuid not null references commitments(id) on delete cascade,user_id uuid not null references profiles(id) on delete cascade,value numeric,note text,completed_at timestamptz not null default now());
+create table enforcement_events(id uuid primary key default gen_random_uuid(),commitment_id uuid not null references commitments(id) on delete cascade,user_id uuid not null references profiles(id) on delete cascade,event_type text not null,metadata jsonb not null default '{}'::jsonb,occurred_at timestamptz not null default now());
+alter table profiles enable row level security;alter table commitments enable row level security;alter table accountability_links enable row level security;alter table commitment_shares enable row level security;alter table checkins enable row level security;alter table enforcement_events enable row level security;
+create policy "own profile" on profiles for all using(id=auth.uid()) with check(id=auth.uid());
+create policy "own commitments" on commitments for all using(owner_id=auth.uid()) with check(owner_id=auth.uid());
+create policy "links participants" on accountability_links for select using(owner_id=auth.uid() or partner_id=auth.uid());
+create policy "owners create links" on accountability_links for insert with check(owner_id=auth.uid());
+create policy "owners manage links" on accountability_links for update using(owner_id=auth.uid() or partner_id=auth.uid());
+create policy "own checkins" on checkins for all using(user_id=auth.uid()) with check(user_id=auth.uid());
+create policy "own enforcement events" on enforcement_events for all using(user_id=auth.uid()) with check(user_id=auth.uid());
