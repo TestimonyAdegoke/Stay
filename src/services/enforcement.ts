@@ -1,0 +1,5 @@
+export type EnforcementEventType="limit_warning"|"limit_reached"|"restricted_attempt"|"protection_disabled"|"override_requested"|"override_granted";
+export type EnforcementEvent={type:EnforcementEventType;commitmentId:string;occurredAt:string;metadata?:Record<string,string|number|boolean>};
+export interface DeviceEnforcementProvider{isAvailable():Promise<boolean>;requestPermissions():Promise<boolean>;applyAppLimit(bundleIds:string[],minutes:number):Promise<void>;applyWebCategoryBlock(categories:string[]):Promise<void>;startFocusMode(commitmentId:string,durationMinutes:number):Promise<void>;stopFocusMode(commitmentId:string):Promise<void>;getProtectionStatus():Promise<"active"|"degraded"|"off">;}
+export class PreviewEnforcementProvider implements DeviceEnforcementProvider{async isAvailable(){return false}async requestPermissions(){return false}async applyAppLimit(){return}async applyWebCategoryBlock(){return}async startFocusMode(){return}async stopFocusMode(){return}async getProtectionStatus(){return "off" as const}}
+export const enforcement:DeviceEnforcementProvider=new PreviewEnforcementProvider();
