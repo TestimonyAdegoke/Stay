@@ -19,3 +19,31 @@ Apply `supabase/schema.sql` to a Supabase project. Authentication should use Sup
 - iOS entitlement approval and Screen Time API tests.
 - Privacy review for every newly collected signal.
 - Accessibility and notification-permission flows.
+
+## Produce installable apps
+
+### Android development APK
+```bash
+npm install
+npx eas login
+npx eas build --platform android --profile development
+```
+
+### Android internal preview
+```bash
+npx eas build --platform android --profile preview
+```
+
+### iOS development build
+Requires an Apple Developer account and registered test device / signing setup.
+```bash
+npx eas build --platform ios --profile development
+```
+
+### Store builds
+```bash
+npx eas build --platform android --profile production
+npx eas build --platform ios --profile production
+```
+
+The current cross-platform app is installable through these builds. Strong device enforcement remains a native-module milestone; do not test it in Expo Go.
