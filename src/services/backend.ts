@@ -1,0 +1,1 @@
+export const backendConfigured=Boolean(process.env.EXPO_PUBLIC_SUPABASE_URL&&process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY);export type SessionUser={id:string;email:string;displayName:string};export async function bootstrapSession():Promise<SessionUser|null>{return null}
