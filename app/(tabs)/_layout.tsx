@@ -1,0 +1,5 @@
+import {Tabs} from "expo-router";
+import {Ionicons} from "@expo/vector-icons";
+import {colors} from "../../src/theme";
+const icons:any={index:["home","home-outline"],commitments:["shield-checkmark","shield-checkmark-outline"],partners:["people","people-outline"],activity:["pulse","pulse-outline"],profile:["person","person-outline"]};
+export default function TabsLayout(){return <Tabs screenOptions={({route})=>({headerShown:false,tabBarActiveTintColor:colors.green,tabBarInactiveTintColor:"#8A928D",tabBarStyle:{height:82,paddingTop:8,paddingBottom:14,borderTopColor:colors.line,backgroundColor:"#FBFAF7"},tabBarLabelStyle:{fontSize:11,fontWeight:"700"},tabBarIcon:({focused,color,size})=><Ionicons name={icons[route.name]?.[focused?0:1]??"ellipse-outline"} color={color} size={size}/>})}><Tabs.Screen name="index" options={{title:"Today"}}/><Tabs.Screen name="commitments" options={{title:"Commitments"}}/><Tabs.Screen name="partners" options={{title:"Partners"}}/><Tabs.Screen name="activity" options={{title:"Activity"}}/><Tabs.Screen name="profile" options={{title:"You"}}/></Tabs>}
