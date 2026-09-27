@@ -1,1 +1,27 @@
-{"expo":{"name":"Stay","slug":"stay","scheme":"stay","version":"0.1.0","orientation":"portrait","userInterfaceStyle":"light","newArchEnabled":true,"plugins":["expo-router"],"experiments":{"typedRoutes":true},"android":{"package":"com.stay.accountability"},"ios":{"bundleIdentifier":"com.stay.accountability"}}}
+{
+  "expo": {
+    "name": "Stay",
+    "slug": "stay",
+    "scheme": "stay",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "plugins": [
+      "expo-router",
+      "expo-notifications"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "android": {
+      "package": "com.stay.accountability",
+      "permissions": [
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.stay.accountability"
+    }
+  }
+}
